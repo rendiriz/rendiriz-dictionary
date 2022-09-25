@@ -38,13 +38,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  languages     Language[]
+  vocabularies  Vocabulary[]
 }
 
 model VerificationToken {
@@ -53,4 +55,41 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Language {
+  id           String       @id @default(uuid())
+  userId       String
+  slug         String       @unique
+  name         String
+  description  String?
+  isActive     Boolean      @default(true)
+  isDelete     Boolean      @default(false)
+  cuid         String
+  cat          DateTime     @default(now())
+  muid         String?
+  mat          DateTime     @updatedAt
+  vocabularies Vocabulary[]
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Vocabulary {
+  id         String   @id @default(uuid())
+  userId     String
+  languageId String
+  slug       String   @unique
+  name       String
+  alphabet   String?
+  translate  String
+  link       String?
+  isActive   Boolean  @default(true)
+  isDelete   Boolean  @default(false)
+  cuid       String
+  cat        DateTime @default(now())
+  muid       String?
+  mat        DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id])
+  language Language @relation(fields: [languageId], references: [id])
 }

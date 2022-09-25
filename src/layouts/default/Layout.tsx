@@ -16,7 +16,7 @@ const Layout = (props: TLayout) => {
   const meta = {
     mainTitle: 'Rendi Riz Dictionary',
     title: null,
-    description: 'Rendi Riz Dictionary',
+    description: 'New Word Order',
     image: 'https://placehold.co/1820x904',
     date: null,
     ...customMeta,
