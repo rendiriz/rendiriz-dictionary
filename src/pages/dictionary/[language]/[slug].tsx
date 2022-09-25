@@ -11,7 +11,8 @@ import SearchGlobal from '@/components/SearchGlobal';
 
 const VocabularyDetail: NextPage = () => {
   const router = useRouter();
-  const { slug } = router.query;
+  let { language, slug } = router.query;
+  language = language as string;
 
   const { isLoading, error, data } = useQuery(['vocabulary', slug], () =>
     fetch(`/api/vocabulary/${slug}`)
@@ -22,7 +23,7 @@ const VocabularyDetail: NextPage = () => {
   return (
     <Layout>
       <>
-        <SearchGlobal />
+        <SearchGlobal language={language} />
         <div className="mx-auto max-w-7xl px-4 mt-12 mb-24">
           <div className="flex flex-col gap-6">
             {error && <div>Failed to load</div>}

@@ -14,7 +14,8 @@ import SearchGlobal from '@/components/SearchGlobal';
 
 const Dictionary: NextPage = () => {
   const router = useRouter();
-  const { language } = router.query;
+  let { language } = router.query;
+  language = language as string;
 
   const { isLoading, error, data } = useQuery(['language', language], () =>
     fetch(`/api/language/${language}`)
@@ -35,7 +36,7 @@ const Dictionary: NextPage = () => {
   return (
     <Layout>
       <>
-        <SearchGlobal />
+        <SearchGlobal language={language} />
         <div className="mx-auto max-w-7xl px-4 mt-12 mb-24">
           <div className="flex flex-col gap-6">
             {error && <div>Failed to load</div>}
@@ -86,7 +87,7 @@ const Dictionary: NextPage = () => {
                   {dataVoc && (
                     <ul className="list-inside list-disc">
                       {dataVoc.map((voc: any) => (
-                        <li key={voc.id} className="py-2">
+                        <li key={voc.id} className="pb-2">
                           <Link href={`/dictionary/${language}/${voc.slug}`}>
                             <a className="underline hover:text-blue-700">
                               {voc.name}

@@ -3,6 +3,7 @@ import { getToken } from 'next-auth/jwt';
 import slugify from 'slugify';
 import { verify } from '@/lib/jwt';
 import { prisma } from '@/lib/prisma';
+import { meili } from '@/lib/meili';
 
 const secret = process.env.NEXTAUTH_SECRET;
 
@@ -58,6 +59,8 @@ const createItem = async (
     where: { slug: slug?.toString(), userId: payload.id },
   });
   const languageId = language?.id as string;
+  const languageSlug = language?.slug;
+  const languageName = language?.name;
 
   const result = await prisma.vocabulary.create({
     data: {
@@ -74,6 +77,26 @@ const createItem = async (
       cuid: payload.id,
     },
   });
+
+  await meili.index('vocabulary').addDocuments([
+    {
+      id: result.id,
+      userId: payload.id,
+      userName: payload.name,
+      languageId: languageId,
+      languageSlug: languageSlug,
+      languageName: languageName,
+      slug: result.slug,
+      alphabet: result.alphabet,
+      name: result.name,
+      translate: result.translate,
+      link: result.link,
+      isActive: result.isActive,
+      isDelete: result.isDelete,
+      cat: result.cat,
+      mat: result.mat,
+    },
+  ]);
 
   res.status(200).json({ code: 200, data: result });
 };

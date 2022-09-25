@@ -53,7 +53,7 @@ const Dictionary: NextPage = () => {
               {data.map((row: any) => (
                 <Link key={row.id} href={`/dictionary/${row.slug}`}>
                   <a>
-                    <div className="rounded-md border hover:border-blue-500 hover:shadow-md p-5">
+                    <div className="rounded-md border dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-md p-5">
                       <h5 className="text-xl mb-4">{row.name}</h5>
                       <p>{row.description}</p>
                     </div>
