@@ -35,8 +35,12 @@ const Layout = (props: TLayout) => {
         <link rel="icon" type="image/svg+xml" href={site.favicon} />
         <link rel="canonical" href={`${site.url}${router.asPath}`} />
         <title>{metaTitle}</title>
+        <meta name="application-name" content={site.name} />
         <meta name="description" content={meta.description} />
         <meta name="robots" content="follow, index" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content={site.nameMobile} />
         <meta property="og:url" content={`${site.url}${router.asPath}`} />
         <meta property="og:type" content={site.type} />
         <meta property="og:site_name" content={site.name} />
@@ -51,6 +55,13 @@ const Layout = (props: TLayout) => {
         {meta.date && (
           <meta property="article:published_time" content={meta.date} />
         )}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#292524" />
+        <link rel="apple-touch-icon" href="/touch-icon-iphone.png" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
       </Head>
       <Navbar />
       <main>{children}</main>

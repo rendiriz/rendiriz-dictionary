@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Image from 'next/future/image';
+import { useTheme } from 'next-themes';
 import { Disclosure } from '@headlessui/react';
 import { CgClose, CgMenu } from 'react-icons/cg';
 import cn from 'classnames';
@@ -97,6 +97,9 @@ const NavAuth = () => {
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const color = resolvedTheme === 'dark' ? '#FAFAF9' : '#292524';
 
   return (
     <Disclosure
@@ -110,12 +113,26 @@ const Navbar = () => {
               <div className="flex items-center">
                 <Link href={'/'}>
                   <a className="text-xl text-gray-800 no-underline whitespace-nowrap py-2">
-                    <Image
-                      alt={site.name}
-                      src="/logoipsum.svg"
-                      width="49"
-                      height="48"
-                    />
+                    <svg
+                      width="50"
+                      height="50"
+                      viewBox="0 0 100 100"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0 66C0 57.1634 7.16344 50 16 50H50V100H0V66Z"
+                        fill={color}
+                      />
+                      <path
+                        d="M100 0L100 50L66 50C57.1634 50 50 42.8366 50 34L50 -2.18557e-06L100 0Z"
+                        fill={color}
+                      />
+                      <path
+                        d="M0 0H34C42.8366 0 50 7.16344 50 16V50H0V0Z"
+                        fill={color}
+                      />
+                    </svg>
                   </a>
                 </Link>
                 <div className="hidden sm:block sm:ml-6">
