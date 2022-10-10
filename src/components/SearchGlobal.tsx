@@ -13,7 +13,13 @@ const SearchGlobal = ({ language }: TSearchGlobal) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>({
+    voc: [],
+    wor: [],
+    inf: [],
+    sla: [],
+    sen: [],
+  });
   let typingTimer: number;
 
   useEffect(() => {
@@ -34,16 +40,34 @@ const SearchGlobal = ({ language }: TSearchGlobal) => {
   };
 
   const getSearch = async (value: string) => {
-    const data = await fetch(
-      `/api/vocabulary/search?q=${value}&language=${language}`,
-    )
-      .then((res) => res.json())
-      .then((res) => {
+    const voc = await fetch(`/api/vocabulary?q=${value}&language=${language}`);
+    const wor = await fetch(`/api/word?q=${value}&language=${language}`);
+    const inf = await fetch(`/api/informal?q=${value}&language=${language}`);
+    const sla = await fetch(`/api/slang?q=${value}&language=${language}`);
+    const sen = await fetch(`/api/sentence?q=${value}&language=${language}`);
+
+    const data = await Promise.all([voc, wor, inf, sla, sen])
+      .then(async (res) => {
+        return {
+          voc: await res[0].json(),
+          wor: await res[1].json(),
+          inf: await res[2].json(),
+          sla: await res[3].json(),
+          sen: await res[4].json(),
+        };
+      })
+      .then(async (res: any) => {
         setIsLoading(false);
-        return res.data;
+        return {
+          voc: res.voc.data,
+          wor: res.wor.data,
+          inf: res.inf.data,
+          sla: res.sla.data,
+          sen: res.sen.data,
+        };
       });
 
-    setData(data.hits);
+    setData(data);
   };
 
   return (
@@ -119,20 +143,104 @@ const SearchGlobal = ({ language }: TSearchGlobal) => {
                           </div>
                         )}
 
-                        {!isLoading && (
-                          <ul className="list-inside list-disc">
-                            {data.map((voc: any) => (
-                              <li key={voc.id} className="pb-2">
-                                <Link
-                                  href={`/dictionary/${voc.languageSlug}/${voc.slug}`}
-                                >
-                                  <a className="underline hover:text-blue-700">
-                                    {voc.name}
-                                  </a>
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
+                        {data.voc.length > 0 && (
+                          <>
+                            <hr className="my-3" />
+                            <div className="font-bold mb-2">Vocabulary</div>
+                            <ul className="list-inside list-disc">
+                              {data.voc.map((voc: any) => (
+                                <li key={voc.id} className="pb-2">
+                                  <Link
+                                    href={`/dictionary/${language}/vocabulary/${voc.slug}`}
+                                  >
+                                    <a className="underline hover:text-blue-700">
+                                      {voc.name}
+                                    </a>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+
+                        {data.wor.length > 0 && (
+                          <>
+                            <hr className="my-3" />
+                            <div className="font-bold mb-2">Word</div>
+                            <ul className="list-inside list-disc">
+                              {data.wor.map((wor: any) => (
+                                <li key={wor.id} className="pb-2">
+                                  <Link
+                                    href={`/dictionary/${language}/word/${wor.slug}`}
+                                  >
+                                    <a className="underline hover:text-blue-700">
+                                      {wor.name}
+                                    </a>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+
+                        {data.inf.length > 0 && (
+                          <>
+                            <hr className="my-3" />
+                            <div className="font-bold mb-2">Informal</div>
+                            <ul className="list-inside list-disc">
+                              {data.inf.map((inf: any) => (
+                                <li key={inf.id} className="pb-2">
+                                  <Link
+                                    href={`/dictionary/${language}/informal/${inf.slug}`}
+                                  >
+                                    <a className="underline hover:text-blue-700">
+                                      {inf.name}
+                                    </a>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+
+                        {data.sla.length > 0 && (
+                          <>
+                            <hr className="my-3" />
+                            <div className="font-bold mb-2">Slang</div>
+                            <ul className="list-inside list-disc">
+                              {data.sla.map((sla: any) => (
+                                <li key={sla.id} className="pb-2">
+                                  <Link
+                                    href={`/dictionary/${language}/slang/${sla.slug}`}
+                                  >
+                                    <a className="underline hover:text-blue-700">
+                                      {sla.name}
+                                    </a>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+
+                        {data.sen.length > 0 && (
+                          <>
+                            <hr className="my-3" />
+                            <div className="font-bold mb-2">Sentence</div>
+                            <ul className="list-inside list-disc">
+                              {data.sen.map((sen: any) => (
+                                <li key={sen.id} className="pb-2">
+                                  <Link
+                                    href={`/dictionary/${language}/sentence/${sen.slug}`}
+                                  >
+                                    <a className="underline hover:text-blue-700">
+                                      {sen.name}
+                                    </a>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
                         )}
                       </div>
                     </div>

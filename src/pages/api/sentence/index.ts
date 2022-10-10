@@ -55,7 +55,7 @@ const getList = async (
     Object.assign(options, { take: Number(perPage) });
   }
 
-  const result = await prisma.vocabulary.findMany(options);
+  const result = await prisma.sentence.findMany(options);
 
   res.status(200).json({ code: 200, data: result });
 };
@@ -76,7 +76,7 @@ const createItem = async (
   // const languageSlug = language?.slug;
   // const languageName = language?.name;
 
-  const result = await prisma.vocabulary.create({
+  const result = await prisma.sentence.create({
     data: {
       userId: payload.id,
       languageId: languageId,
@@ -92,7 +92,7 @@ const createItem = async (
     },
   });
 
-  // await meili.index('vocabulary').addDocuments([
+  // await meili.index('sentence').addDocuments([
   //   {
   //     id: result.id,
   //     userId: payload.id,

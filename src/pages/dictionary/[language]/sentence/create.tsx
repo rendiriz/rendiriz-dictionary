@@ -10,13 +10,13 @@ import cn from 'classnames';
 import Layout from '@/layouts/default/Layout';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const VocabularyCreate: NextPage = () => {
+const SentenceCreate: NextPage = () => {
   const router = useRouter();
   const { language } = router.query;
 
   const mutation = useMutation(
     (payload: any) =>
-      fetch(`/api/vocabulary`, {
+      fetch(`/api/sentence`, {
         method: 'POST',
         body: JSON.stringify(payload),
       })
@@ -37,10 +37,11 @@ const VocabularyCreate: NextPage = () => {
     <Layout>
       <div className="mx-auto max-w-7xl px-4 mt-12 mb-24">
         <div className="flex flex-col gap-6">
-          <h1 className="text-5xl mb-4">Create Vocabulary</h1>
+          <h1 className="text-5xl mb-4">Create Sentence</h1>
 
           <Formik
             initialValues={{
+              language: language,
               alphabet: '',
               name: '',
               translate: '',
@@ -88,7 +89,7 @@ const VocabularyCreate: NextPage = () => {
                   htmlFor="name"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
-                  Vocabulary
+                  Sentence
                 </label>
                 <Field name="name">
                   {({ field, meta }: any) => (
@@ -97,7 +98,7 @@ const VocabularyCreate: NextPage = () => {
                         type="text"
                         id="name"
                         className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Vocabulary"
+                        placeholder="Sentence"
                         {...field}
                       />
                       {meta.touched && meta.error && (
@@ -208,4 +209,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default VocabularyCreate;
+export default SentenceCreate;
